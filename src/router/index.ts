@@ -5,6 +5,7 @@ import Money from "@/views/Money.vue";
 import Statistics from "@/views/Statistics.vue";
 import EditTag from "@/views/EditTag.vue";
 import ManageTags from "@/views/ManageTags.vue";
+import NotFound from "@/views/NotFound.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -32,6 +33,10 @@ const routes: Array<RouteConfig> = [
     path: '/manageTags',
     component: ManageTags
   },
+  {
+    path: '*',
+    component: NotFound
+  }
 ];
 
 const router = new VueRouter({
