@@ -17,6 +17,9 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": ["off"],
     '@typescript-eslint/no-var-requires': 0,
   },
+  'globals': {
+    "__WebpackModuleApi": true,
+  },
   overrides: [
     {
       files: [
