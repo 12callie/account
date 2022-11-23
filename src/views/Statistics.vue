@@ -1,5 +1,5 @@
 <template>
-  <div>统计</div>
+  <layout>统计</layout>
 </template>
 
 <script lang="ts">

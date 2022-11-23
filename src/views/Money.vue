@@ -1,5 +1,5 @@
 <template>
-  <div>记一笔</div>
+  <layout>记一笔</layout>
 </template>
 
 <script lang="ts">
