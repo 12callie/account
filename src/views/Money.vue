@@ -23,5 +23,13 @@ export default class Money extends Vue {}
 <style lang="scss" scoped>
 .money-content {
   background-color: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  ::v-deep .icon {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

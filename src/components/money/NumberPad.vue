@@ -114,9 +114,5 @@ $bg: rgb(242, 242, 242);
       }
     }
   }
-  ::v-deep .icon {
-    width: 30px;
-    height: 30px;
-  }
 }
 </style>

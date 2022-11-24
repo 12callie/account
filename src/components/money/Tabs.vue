@@ -21,8 +21,8 @@ export default class Tabs extends Vue {}
   justify-content: center;
   align-content: center;
   &-item {
-    padding: 8px 16px;
-    height: 40px;
+    padding: 24px 28px 4px 28px;
+    height: 56px;
     position: relative;
     &.selected {
       color: $color-highlight;

@@ -66,6 +66,54 @@
       </div>
       <span>自定义</span>
     </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
+    <li>
+      <div class="tags-icons">
+        <Icon name="自定义" />
+      </div>
+      <span>自定义</span>
+    </li>
   </ul>
 </template>
 
@@ -79,6 +127,7 @@ export default class Tags extends Vue {}
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
 .tags {
+  flex-grow: 1;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -107,10 +156,6 @@ export default class Tags extends Vue {}
         color: #fff;
       }
     }
-  }
-  ::v-deep .icon {
-    width: 30px;
-    height: 30px;
   }
 }
 </style>

@@ -14,10 +14,10 @@ export default class MoneyReturn extends Vue {}
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
 .moneyReturn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 16px;
   color: $color-highlight;
-  ::v-deep .icon {
-    width: 24px;
-    height: 24px;
-  }
 }
 </style>
