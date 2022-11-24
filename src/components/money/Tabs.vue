@@ -1,17 +1,37 @@
 <template>
   <div>
     <ol class="tabs">
-      <li class="tabs-item selected">支出</li>
-      <li class="tabs-item">收入</li>
+      <li
+        class="tabs-item"
+        :class="type === '-' && 'selected'"
+        @click="selectType('-')"
+      >
+        支出
+      </li>
+      <li
+        class="tabs-item"
+        :class="type === '+' && 'selected'"
+        @click="selectType('+')"
+      >
+        收入
+      </li>
     </ol>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 @Component
-export default class Tabs extends Vue {}
+export default class Tabs extends Vue {
+  type = "-";
+  selectType(type: string) {
+    if (this.type !== "-" && this.type !== "+") {
+      throw new Error("type is unknown");
+    }
+    this.type = type;
+  }
+}
 </script>
 
 <style lang="scss" scoped>
