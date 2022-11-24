@@ -19,6 +19,7 @@ module.exports = {
   },
   'globals': {
     "__WebpackModuleApi": true,
+    "Tag": true
   },
   overrides: [
     {

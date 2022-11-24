@@ -1,118 +1,15 @@
 <template>
   <ul class="tags">
-    <li>
+    <li
+      v-for="tag in expenseTags"
+      :key="tag.id"
+      @click="select(tag)"
+      :class="{ selected: selectedTag.indexOf(tag) >= 0 }"
+    >
       <div class="tags-icons">
-        <Icon name="水果" />
+        <Icon :name="tag.name" />
       </div>
-      <span>水果</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="餐饮" />
-      </div>
-      <span>餐饮</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="零食" />
-      </div>
-      <span>零食</span>
-    </li>
-    <li>
-      <div class="tags-icons selected">
-        <Icon name="交通" />
-      </div>
-      <span>交通</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="通讯" />
-      </div>
-      <span>通讯</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
-    </li>
-    <li>
-      <div class="tags-icons">
-        <Icon name="自定义" />
-      </div>
-      <span>自定义</span>
+      <span>{{ tag.name }}</span>
     </li>
   </ul>
 </template>
@@ -120,8 +17,20 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import { expenseTags, incomeTags } from "@/constants/defaultTagList";
 @Component
-export default class Tags extends Vue {}
+export default class Tags extends Vue {
+  expenseTags = expenseTags;
+  incomeTags = incomeTags;
+
+  selectedTag: Tag[] = [];
+  select(tag: Tag) {
+    if (this.selectedTag.length > 0) {
+      this.selectedTag = [];
+    }
+    this.selectedTag.push(tag);
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -141,6 +50,12 @@ export default class Tags extends Vue {}
     align-items: center;
     padding: 8px 0;
     font-size: 14px;
+    &.selected {
+      > .tags-icons {
+        background: $color-highlight;
+        color: #fff;
+      }
+    }
     > .tags-icons {
       width: 48px;
       height: 48px;

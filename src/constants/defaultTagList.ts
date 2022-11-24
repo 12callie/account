@@ -1,0 +1,42 @@
+const expenseTags = Object.freeze([
+    { id: 1, name: '水果' },
+    { id: 2, name: '餐饮' },
+    { id: 3, name: '零食' },
+    { id: 4, name: '交通' },
+    { id: 5, name: '通讯' },
+    { id: 6, name: '日用品' },
+    { id: 7, name: '服饰' },
+    { id: 8, name: '美容' },
+    { id: 9, name: '娱乐' },
+    { id: 10, name: '健身' },
+    { id: 11, name: '医疗' },
+    { id: 12, name: '保险' },
+    { id: 13, name: '投资' },
+    { id: 14, name: '学习' },
+    { id: 15, name: '住房' },
+    { id: 16, name: '水电煤' },
+    { id: 17, name: '维修' },
+    { id: 18, name: '停车' },
+    { id: 19, name: '加油' },
+    { id: 20, name: '发红包' },
+    { id: 21, name: '送礼' },
+    { id: 22, name: '孩子' },
+    { id: 23, name: '宠物' },
+    { id: 24, name: '游戏' },
+    { id: 34, name: '自定义' },
+
+]);
+const incomeTags = Object.freeze([
+    { id: 25, name: '工资' },
+    { id: 26, name: '兼职' },
+    { id: 27, name: '生活费' },
+    { id: 28, name: '收红包' },
+    { id: 29, name: '奖金' },
+    { id: 30, name: '投资' },
+    { id: 31, name: '报销' },
+    { id: 32, name: '借款' },
+    { id: 33, name: '退款' },
+    { id: 35, name: '自定义' },
+
+]);
+export { expenseTags, incomeTags };
