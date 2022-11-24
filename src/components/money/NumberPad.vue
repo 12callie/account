@@ -28,4 +28,8 @@ export default class NumberPad extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+button {
+  border-style: none;
+  background: inherit;
+}
 </style>

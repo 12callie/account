@@ -1,10 +1,10 @@
 <template>
-  <layout classPrefix="money">
+  <div class="money-content">
     <MoneyReturn />
     <Tabs />
     <Tags />
     <NumberPad />
-  </layout>
+  </div>
 </template>
 
 <script lang="ts">
@@ -21,4 +21,7 @@ export default class Money extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+.money-content {
+  background-color: #fff;
+}
 </style>

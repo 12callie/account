@@ -1,8 +1,8 @@
 <template>
   <div>
     <ol class="tabs">
-      <li class="selected">支出</li>
-      <li>收入</li>
+      <li class="tabs-item selected">支出</li>
+      <li class="tabs-item">收入</li>
     </ol>
   </div>
 </template>
@@ -15,4 +15,27 @@ export default class Tabs extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+.tabs {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  &-item {
+    padding: 8px 16px;
+    height: 40px;
+    position: relative;
+    &.selected {
+      color: $color-highlight;
+    }
+    &.selected::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: $color-highlight;
+    }
+  }
+}
 </style>

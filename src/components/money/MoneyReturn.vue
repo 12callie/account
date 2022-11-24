@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Icon name="return" class="moneyReturn" />
+  <div class="moneyReturn">
+    <Icon name="return" />
   </div>
 </template>
 
@@ -13,8 +13,11 @@ export default class MoneyReturn extends Vue {}
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
-
 .moneyReturn {
   color: $color-highlight;
+  ::v-deep .icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 </style>

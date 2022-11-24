@@ -43,7 +43,6 @@ export default class Nav extends Vue {}
     ::v-deep .icon {
       width: 30px;
       height: 30px;
-      margin-bottom: 4px;
     }
   }
 }
