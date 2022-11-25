@@ -1,28 +1,26 @@
 <template>
   <div class="numberPad" v-if="show">
-    <div class="notes">
-      <span class="name">备注</span>
-      <input type="text" placeholder="输入备注…" />
-    </div>
-    <div class="output">100</div>
-
+    <div class="output">{{ output }}</div>
     <div class="buttons">
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>今天</button>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
-      <button>
+      <button @click="inputContent">1</button>
+      <button @click="inputContent">2</button>
+      <button @click="inputContent">3</button>
+      <button class="calendar" @click="selectDate">
+        <Icon name="calendar" />
+        <span>今天</span>
+      </button>
+      <button @click="inputContent">4</button>
+      <button @click="inputContent">5</button>
+      <button @click="inputContent">6</button>
+      <button @click="remove">
         <Icon name="delete" />
       </button>
-      <button>7</button>
-      <button>8</button>
-      <button>9</button>
-      <button class="ok">完成</button>
-      <button class="zero">0</button>
-      <button>.</button>
+      <button @click="inputContent">7</button>
+      <button @click="inputContent">8</button>
+      <button @click="inputContent">9</button>
+      <button class="ok" @click="ok">完成</button>
+      <button class="zero" @click="inputContent">0</button>
+      <button @click="inputContent">.</button>
     </div>
   </div>
 </template>
@@ -33,6 +31,46 @@ import { Component, Prop } from "vue-property-decorator";
 @Component
 export default class NumberPad extends Vue {
   @Prop(Boolean) show!: boolean;
+  output = "0";
+
+  inputContent(e: MouseEvent) {
+    const button = e.target as HTMLButtonElement;
+    const input = button.textContent!;
+    if (this.output.length === 16) {
+      return;
+    }
+    if (this.output === "0") {
+      if ("0123456789".indexOf(input) >= 0) {
+        this.output = input;
+      } else if (input === ".") {
+        this.output = "0.";
+      }
+      // else {
+      //   this.output += input;
+      // }
+      return;
+    }
+    if (this.output.indexOf(".") >= 0 && input === ".") {
+      return;
+    }
+    this.output += input;
+    this.output = this.output.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //eslint-disable-line
+  }
+  selectDate() {
+    console.log("还没写");
+  }
+  remove() {
+    if (this.output.length === 1) {
+      this.output = "0";
+    } else {
+      this.output = this.output.slice(0, -1);
+    }
+  }
+  ok() {
+    this.$emit("update:value", this.output);
+    this.$emit("submit", this.output);
+    this.output = "0";
+  }
 }
 </script>
 
@@ -41,22 +79,6 @@ export default class NumberPad extends Vue {
 $bg: rgb(242, 242, 242);
 
 .numberPad {
-  > .notes {
-    border-top: 1px solid #eee;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    background-color: #fff;
-
-    .name {
-      padding-right: 16px;
-    }
-    input {
-      border: none;
-      height: 44px;
-      flex-grow: 1;
-    }
-  }
   > .output {
     font-size: 28px;
     font-family: Consolas, monospace;
@@ -80,6 +102,19 @@ $bg: rgb(242, 242, 242);
       float: left;
       background-color: transparent;
       border: none;
+      &.calendar {
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          padding-left: 8px;
+        }
+        ::v-deep .icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
       &.ok {
         height: 88px;
         float: right;

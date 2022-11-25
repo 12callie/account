@@ -6,5 +6,5 @@ type RecordItem = {
     tags: Tag[],
     notes: string,
     type: "-" | '+',
-    amount: number,
+    amount: string,
 };
