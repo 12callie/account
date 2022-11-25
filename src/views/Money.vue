@@ -1,9 +1,9 @@
 <template>
   <div class="money-content">
-    <MoneyReturn />
-    <Tabs />
-    <Tags />
-    <NumberPad />
+    <Money-return />
+    <Tabs :type.sync="record.type" />
+    <Tags :type="record.type" @update:tag="record.tags = $event" />
+    <Number-pad :show.sync="showNumberPad" />
   </div>
 </template>
 
@@ -17,7 +17,21 @@ import NumberPad from "@/components/money/NumberPad.vue";
 @Component({
   components: { MoneyReturn, Tags, Tabs, NumberPad },
 })
-export default class Money extends Vue {}
+export default class Money extends Vue {
+  record: RecordItem = {
+    type: "-",
+    tags: [],
+    notes: "",
+    amount: 0,
+  };
+  get showNumberPad() {
+    if (this.record.tags.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

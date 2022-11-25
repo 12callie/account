@@ -1,5 +1,5 @@
 <template>
-  <div>tags</div>
+  <div>管理tags</div>
 </template>
 
 <script lang="ts">

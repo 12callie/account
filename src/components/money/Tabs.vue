@@ -24,12 +24,12 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 @Component
 export default class Tabs extends Vue {
-  type = "-";
+  @Prop(String) type!: string;
   selectType(type: string) {
     if (this.type !== "-" && this.type !== "+") {
       throw new Error("type is unknown");
     }
-    this.type = type;
+    this.$emit("update:type", type);
   }
 }
 </script>

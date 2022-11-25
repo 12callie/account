@@ -23,8 +23,6 @@ const expenseTags = Object.freeze([
     { id: 22, name: '孩子' },
     { id: 23, name: '宠物' },
     { id: 24, name: '游戏' },
-    { id: 34, name: '自定义' },
-
 ]);
 const incomeTags = Object.freeze([
     { id: 25, name: '工资' },
@@ -36,7 +34,5 @@ const incomeTags = Object.freeze([
     { id: 31, name: '报销' },
     { id: 32, name: '借款' },
     { id: 33, name: '退款' },
-    { id: 35, name: '自定义' },
-
 ]);
 export { expenseTags, incomeTags };

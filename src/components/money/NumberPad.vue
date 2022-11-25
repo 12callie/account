@@ -1,5 +1,5 @@
 <template>
-  <div class="numberPad">
+  <div class="numberPad" v-if="show">
     <div class="notes">
       <span class="name">备注</span>
       <input type="text" placeholder="输入备注…" />
@@ -29,9 +29,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 @Component
-export default class NumberPad extends Vue {}
+export default class NumberPad extends Vue {
+  @Prop(Boolean) show!: boolean;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -44,12 +46,13 @@ $bg: rgb(242, 242, 242);
     display: flex;
     align-items: center;
     padding: 0 16px;
+    background-color: #fff;
+
     .name {
       padding-right: 16px;
     }
     input {
       border: none;
-      background-color: transparent;
       height: 44px;
       flex-grow: 1;
     }
