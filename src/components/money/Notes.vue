@@ -1,5 +1,5 @@
 <template>
-  <div class="notes" v-if="show">
+  <div class="notes" v-if="showPad">
     {{ value }}
     <span class="name">备注</span>
     <input type="text" placeholder="输入备注…" v-model="value" />
@@ -11,7 +11,7 @@ import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 @Component
 export default class Notes extends Vue {
-  @Prop(Boolean) show!: boolean;
+  @Prop(Boolean) showPad!: boolean;
   value = "";
   @Watch("value")
   onValueChange(value: string) {

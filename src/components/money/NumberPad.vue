@@ -1,13 +1,14 @@
 <template>
-  <div class="numberPad" v-if="show">
+  <div class="numberPad" v-if="showPad">
+    {{ date }}
     <div class="output">{{ output }}</div>
     <div class="buttons">
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
       <button @click="inputContent">3</button>
       <button class="calendar" @click="selectDate">
-        <Icon name="calendar" />
-        <span>今天</span>
+        <div v-if="date === ''"><Icon name="calendar" /></div>
+        <span>{{ date }}</span>
       </button>
       <button @click="inputContent">4</button>
       <button @click="inputContent">5</button>
@@ -22,17 +23,23 @@
       <button class="zero" @click="inputContent">0</button>
       <button @click="inputContent">.</button>
     </div>
+    <Cal ref="calElement" @update:date="date = $event" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-@Component
+import { Component, Prop, Ref } from "vue-property-decorator";
+import Cal from "@/components/Cal.vue";
+import dayjs from "dayjs";
+@Component({
+  components: { Cal },
+})
 export default class NumberPad extends Vue {
-  @Prop(Boolean) show!: boolean;
+  @Prop(Boolean) showPad!: boolean;
+  @Ref("calElement") calElement!: Cal;
   output = "0";
-
+  date = "";
   inputContent(e: MouseEvent) {
     const button = e.target as HTMLButtonElement;
     const input = button.textContent!;
@@ -45,9 +52,6 @@ export default class NumberPad extends Vue {
       } else if (input === ".") {
         this.output = "0.";
       }
-      // else {
-      //   this.output += input;
-      // }
       return;
     }
     if (this.output.indexOf(".") >= 0 && input === ".") {
@@ -57,7 +61,7 @@ export default class NumberPad extends Vue {
     this.output = this.output.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //eslint-disable-line
   }
   selectDate() {
-    console.log("还没写");
+    this.calElement.showCal = true;
   }
   remove() {
     if (this.output.length === 1) {
@@ -90,6 +94,10 @@ $bg: rgb(242, 242, 242);
     background-color: $bg;
   }
   > .buttons {
+    ::v-deep .icon {
+      width: 24px;
+      height: 24px;
+    }
     &::after {
       content: "";
       display: block;
@@ -102,18 +110,11 @@ $bg: rgb(242, 242, 242);
       float: left;
       background-color: transparent;
       border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &.calendar {
         font-size: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        span {
-          padding-left: 8px;
-        }
-        ::v-deep .icon {
-          width: 16px;
-          height: 16px;
-        }
       }
       &.ok {
         height: 88px;

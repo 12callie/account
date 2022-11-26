@@ -1,10 +1,14 @@
 <template>
-  <layout>账单</layout>
+  <layout>
+    <span>账单</span>
+  </layout>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import { Calendar, Cell } from "vant";
+
 @Component
 export default class Bills extends Vue {}
 </script>

@@ -1,11 +1,10 @@
 <template>
   <div class="money-content">
-    {{ record }}
     <Money-return />
     <Tabs :type.sync="record.type" />
     <Tags :type="record.type" @update:tag="record.tags = $event" />
-    <Notes :show="showPad" @update:notes="record.notes = $event" />
-    <Number-pad :show="showPad" />
+    <Notes :showPad="showPad" @update:notes="record.notes = $event" />
+    <Number-pad :showPad="showPad" />
   </div>
 </template>
 
