@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { defaultTags } from "@/constants/defaultTagList";
+import clone from "@/lib/clone";
 
 Vue.use(Vuex);
 
@@ -11,7 +13,7 @@ type RootState = {
 const store = new Vuex.Store({
   state: {
     tagList: [],
-    recordList: []
+    recordList: [],
   } as RootState,
   mutations: {
     fetchRecords(state) {
@@ -21,13 +23,21 @@ const store = new Vuex.Store({
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
     },
     createRecords(state, record: RecordItem) {
-      if (record) {
-        const record2 = JSON.parse(JSON.stringify(record));
-        state.recordList.push(record2);
-        console.log('here');
-        store.commit('saveRecords');
+      const record2 = clone(record);
+      state.recordList.push(record2);
+      store.commit('saveRecords');
+    },
+
+    fetchTags(state) {
+      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+      if (!state.tagList || state.tagList.length === 0) {
+        state.tagList = defaultTags;
+        store.commit('saveTags');
       }
-    }
+    },
+    saveTags(state) {
+      window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
+    },
   },
   actions: {
   },

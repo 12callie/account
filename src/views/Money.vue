@@ -31,6 +31,9 @@ export default class Money extends Vue {
     amount: "0",
     date: "",
   };
+  get recordList() {
+    return this.$store.state.recordList;
+  }
   onUpdateValues(values: { date: string; output: string }) {
     const { date, output } = values;
     this.record.date = date;
