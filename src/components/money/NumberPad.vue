@@ -1,6 +1,5 @@
 <template>
   <div class="numberPad" v-if="showPad">
-    {{ date }}
     <div class="output">{{ output }}</div>
     <div class="buttons">
       <button @click="inputContent">1</button>
@@ -71,8 +70,12 @@ export default class NumberPad extends Vue {
     }
   }
   ok() {
-    this.$emit("update:value", this.output);
-    this.$emit("submit", this.output);
+    const values = { date: this.date, output: this.output };
+    if (values.date === "") {
+      values.date = dayjs().format("YYYY/M/D");
+    }
+    this.$emit("update:values", values);
+    this.$emit("submit", values);
     this.output = "0";
   }
 }

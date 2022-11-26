@@ -1,6 +1,5 @@
 <template>
   <div class="notes" v-if="showPad">
-    {{ value }}
     <span class="name">备注</span>
     <input type="text" placeholder="输入备注…" v-model="value" />
   </div>

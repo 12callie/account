@@ -7,4 +7,5 @@ type RecordItem = {
     notes: string,
     type: "-" | '+',
     amount: string,
+    date: string,
 };
