@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="editTag">
     <Back />
+    <Title-manage />
+    <spare-icons />
   </div>
 </template>
 
@@ -8,8 +10,10 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Back from "@/components/money/Back.vue";
+import TitleManage from "@/components/tagManage/TitleMange.vue";
+import SpareIcons from "@/components/tagManage/SpareIcons.vue";
 @Component({
-  components: { Back },
+  components: { Back, TitleManage, SpareIcons },
 })
 export default class EditTag extends Vue {
   created() {
@@ -23,4 +27,11 @@ export default class EditTag extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+
+.editTag {
+  @extend %iconSize;
+
+  background: #fff;
+}
 </style>
