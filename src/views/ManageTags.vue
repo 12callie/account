@@ -1,13 +1,236 @@
 <template>
-  <div>管理tags</div>
+  <div class="manageTags">
+    <Back />
+    <Tabs :type.sync="type" />
+    <ol class="tags">
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+      <li>
+        <div class="removeTag">
+          <Icon name="remove" />
+        </div>
+        <div class="icons">
+          <Icon name="还不知道" />
+        </div>
+        <span>标签名还不知道</span>
+        <button class="editButton">编辑</button>
+      </li>
+    </ol>
+    <div class="createTag">
+      <button>
+        <Icon name="add" />
+        <span>新增类别</span>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-@Component
-export default class ManageTags extends Vue {}
+import Back from "@/components/money/Back.vue";
+import Tabs from "@/components/money/Tabs.vue";
+
+@Component({
+  components: { Back, Tabs },
+})
+export default class ManageTags extends Vue {
+  type = "-";
+}
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+
+.manageTags {
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  ::v-deep .icon {
+    width: 30px;
+    height: 30px;
+  }
+  .tags {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex-grow: 1;
+    li {
+      width: 100vw;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #eee;
+      .removeTag {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgb(219, 1, 0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        margin-right: 16px;
+      }
+      .icons {
+        @extend %iconStyle;
+        margin-right: 16px;
+      }
+      span {
+        float: left;
+        flex-grow: 1;
+      }
+      button {
+        border-style: none;
+        background: inherit;
+      }
+    }
+  }
+  .createTag {
+    border: 1px solid #eee;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 42px;
+    button {
+      border-style: none;
+      background: inherit;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: $color-highlight;
+      ::v-deep .icon {
+        width: 24px;
+        height: 24px;
+      }
+      span {
+        margin-left: 4px;
+      }
+    }
+  }
+}
 </style>

@@ -39,7 +39,7 @@ export default class Tabs extends Vue {
 .tabs {
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   &-item {
     padding: 24px 28px 4px 28px;
     height: 56px;

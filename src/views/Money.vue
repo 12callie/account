@@ -1,6 +1,6 @@
 <template>
   <div class="money-content">
-    <Money-return />
+    <Back />
     <Tabs :type.sync="record.type" />
     <Tags :type="record.type" @update:tag="record.tags = $event" />
     <Notes :showPad="showPad" @update:notes="record.notes = $event" />
@@ -15,13 +15,13 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import MoneyReturn from "@/components/money/MoneyReturn.vue";
+import Back from "@/components/money/Back.vue";
 import Tags from "@/components/money/Tags.vue";
 import Tabs from "@/components/money/Tabs.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
 import Notes from "@/components/money/Notes.vue";
 @Component({
-  components: { MoneyReturn, Tags, Tabs, NumberPad, Notes },
+  components: { Back, Tags, Tabs, NumberPad, Notes },
 })
 export default class Money extends Vue {
   record: RecordItem = {

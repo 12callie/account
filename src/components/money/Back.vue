@@ -1,5 +1,5 @@
 <template>
-  <div class="moneyReturn">
+  <div class="return">
     <Icon name="return" @click.native="goBack" />
   </div>
 </template>
@@ -8,16 +8,16 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 @Component
-export default class MoneyReturn extends Vue {
+export default class Back extends Vue {
   goBack() {
-    this.$router.push("/");
+    this.$router.back();
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
-.moneyReturn {
+.return {
   position: absolute;
   top: 0;
   left: 0;

@@ -61,7 +61,6 @@ export default class Tags extends Vue {
   align-content: flex-start;
   overflow: auto;
   border-top: 1px solid #eee;
-  // padding-bottom: 50vh;
   > li {
     display: flex;
     flex-direction: column;
@@ -79,15 +78,8 @@ export default class Tags extends Vue {
       }
     }
     > .tags-icons {
-      width: 48px;
-      height: 48px;
-      padding: 4px;
-      border-radius: 50%;
-      background: rgb(221, 221, 221);
+      @extend %iconStyle;
       margin-bottom: 4px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       &.user-defined {
         color: $color-highlight;
       }
