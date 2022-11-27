@@ -3,135 +3,14 @@
     <Back />
     <Tabs :type.sync="type" />
     <ol class="tags">
-      <li>
-        <div class="removeTag">
+      <li v-for="t in tags" :key="t.id">
+        <div class="removeTag" @click="remove(t)">
           <Icon name="remove" />
         </div>
         <div class="icons">
-          <Icon name="还不知道" />
+          <Icon :name="t.name" />
         </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
-        <button class="editButton">编辑</button>
-      </li>
-      <li>
-        <div class="removeTag">
-          <Icon name="remove" />
-        </div>
-        <div class="icons">
-          <Icon name="还不知道" />
-        </div>
-        <span>标签名还不知道</span>
+        <span>{{ t.name }}</span>
         <button class="editButton">编辑</button>
       </li>
     </ol>
@@ -154,7 +33,22 @@ import Tabs from "@/components/money/Tabs.vue";
   components: { Back, Tabs },
 })
 export default class ManageTags extends Vue {
-  type = "-";
+  type = this.$route.query.type;
+  created() {
+    this.$store.commit("fetchTags");
+  }
+  get tagList() {
+    return this.$store.state.tagList as Tag[];
+  }
+  get tags() {
+    return this.tagList.filter((i) => i.type === this.type);
+  }
+  remove(t: Tag) {
+    if (this.tags.length === 1) {
+      return window.alert("当前是最后一个标签了，请先添加标签再删除吧");
+    }
+    this.$store.commit("removeTag", t);
+  }
 }
 </script>
 

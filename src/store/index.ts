@@ -38,10 +38,25 @@ const store = new Vuex.Store({
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
     },
+    removeTag(state, tag: Tag) {
+      const id = tag.id;
+      if (window.confirm("确定删除此标签吗？")) {
+        let index = -1;
+        for (let i = 0; i < state.tagList.length; i++) {
+          if (state.tagList[i].id === id) {
+            index = i;
+            break;
+          }
+        }
+        if (index >= 0) {
+          state.tagList.splice(index, 1);
+          store.commit('saveTags');
+        } else {
+          window.alert("删除失败");
+        }
+      }
+    }
   },
-  actions: {
-  },
-  modules: {
-  }
+
 });
 export default store;   

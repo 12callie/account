@@ -46,7 +46,12 @@ export default class Tags extends Vue {
     this.$emit("update:tag", this.selectedTag);
   }
   manageTags() {
-    this.$router.push("/manageTags");
+    this.$router.push({
+      path: "/manageTags",
+      query: {
+        type: this.type,
+      },
+    });
   }
 }
 </script>
