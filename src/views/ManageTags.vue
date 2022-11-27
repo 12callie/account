@@ -11,7 +11,9 @@
           <Icon :name="t.name" />
         </div>
         <span>{{ t.name }}</span>
-        <button class="editButton">编辑</button>
+        <router-link :to="`/editTag/${t.id}`" class="editButton"
+          >编辑</router-link
+        >
       </li>
     </ol>
     <div class="createTag">
@@ -56,14 +58,12 @@ export default class ManageTags extends Vue {
 @import "~@/assets/style/helper.scss";
 
 .manageTags {
+  @extend %iconSize;
   height: 100vh;
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  ::v-deep .icon {
-    width: 30px;
-    height: 30px;
-  }
+
   .tags {
     font-size: 14px;
     display: flex;
@@ -94,10 +94,6 @@ export default class ManageTags extends Vue {
       span {
         float: left;
         flex-grow: 1;
-      }
-      button {
-        border-style: none;
-        background: inherit;
       }
     }
   }

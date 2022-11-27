@@ -62,15 +62,14 @@ export default class Money extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+
 .money-content {
+  @extend %iconSize;
   background-color: #fff;
   height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
-  ::v-deep .icon {
-    width: 30px;
-    height: 30px;
-  }
 }
 </style>

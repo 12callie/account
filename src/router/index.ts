@@ -26,7 +26,7 @@ const routes: Array<RouteConfig> = [
     component: Money
   },
   {
-    path: '/editTag',
+    path: '/editTag/:id',
     component: EditTag
   },
   {

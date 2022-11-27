@@ -15,3 +15,10 @@ $color-highlight: rgb(48, 62, 159);
     justify-content: center;
     align-items: center;
 }
+
+%iconSize {
+    ::v-deep .icon {
+        width: 30px;
+        height: 30px;
+    }
+}
