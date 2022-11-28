@@ -14,7 +14,7 @@
         </router-link>
       </li>
     </ol>
-    <div class="createTag">
+    <div class="createTag" @click="createTag">
       <button>
         <Icon name="add" />
         <span>新增类别</span>
@@ -50,6 +50,14 @@ export default class ManageTags extends Vue {
     }
     this.$store.commit("removeTag", t);
   }
+  createTag() {
+    this.$router.push({
+      path: "/newTag",
+      query: {
+        typeNew: this.type,
+      },
+    });
+  }
 }
 </script>
 
@@ -59,7 +67,6 @@ export default class ManageTags extends Vue {
 .manageTags {
   @extend %iconSize;
   height: 100vh;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
 

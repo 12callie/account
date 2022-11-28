@@ -25,6 +25,7 @@ export default class Layout extends Vue {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background: rgb(245, 245, 245);
   .content {
     flex-grow: 1;
     overflow: auto;

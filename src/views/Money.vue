@@ -66,7 +66,6 @@ export default class Money extends Vue {
 
 .money-content {
   @extend %iconSize;
-  background-color: #fff;
   height: 100vh;
   display: flex;
   flex-direction: column;

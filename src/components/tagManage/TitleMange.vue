@@ -1,15 +1,33 @@
 <template>
   <div class="titleManage">
-    <span>编辑支出类别</span>
+    <span>{{ title }}类别</span>
     <button class="save">保存</button>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 @Component
-export default class TitleManage extends Vue {}
+export default class TitleManage extends Vue {
+  typeNew = this.$route.query.typeNew;
+  @Prop(String) type!: string;
+
+  get title() {
+    const hash: { [key: string]: boolean } = {
+      编辑支出: this.type === "-",
+      编辑收入: this.type === "+",
+      新增支出: this.typeNew === "-",
+      新增收入: this.typeNew === "+",
+    };
+    for (let i in hash) {
+      if (hash[i] === true) {
+        return i;
+      }
+    }
+    return "";
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -23,8 +41,7 @@ export default class TitleManage extends Vue {}
   color: $color-highlight;
   font-size: 18px;
   padding: 18px 16px 16px 70px;
-  span {
-  }
+
   .save {
     border-style: none;
     background: inherit;

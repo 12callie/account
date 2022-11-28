@@ -1,7 +1,7 @@
 <template>
   <div class="editTag">
     <Back />
-    <Title-manage />
+    <Title-manage :type="tag.type" />
     <Current-tag :iconName="tag.name" :tagName="tag.name" />
     <Spare-icons />
   </div>
@@ -33,7 +33,6 @@ export default class EditTag extends Vue {
 
 <style lang="scss" scoped>
 .editTag {
-  background: #fff;
   height: 100vh;
   display: flex;
   flex-direction: column;
