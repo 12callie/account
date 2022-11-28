@@ -6,15 +6,14 @@
       @click="select(tag)"
       :class="{ selected: selectedTag.indexOf(tag) >= 0 }"
     >
-      <div class="tags-icons">
-        <Icon :name="tag.name" />
-      </div>
+      <Circular-icon :iconName="tag.name" class="tags-icons" />
       <span>{{ tag.name }}</span>
     </li>
     <li @click="manageTags">
-      <div class="tags-icons user-defined">
+      <!-- <div class="tags-icons user-defined">
         <Icon name="自定义" />
-      </div>
+      </div> -->
+      <Circular-icon iconName="自定义" class="tags-icons user-defined" />
       <span>自定义</span>
     </li>
   </ul>
@@ -23,7 +22,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-@Component
+import CircularIcon from "@/components/CircularIcon.vue";
+
+@Component({
+  components: { CircularIcon },
+})
 export default class Tags extends Vue {
   created() {
     this.$store.commit("fetchTags");
@@ -83,7 +86,6 @@ export default class Tags extends Vue {
       }
     }
     > .tags-icons {
-      @extend %iconStyle;
       margin-bottom: 4px;
       &.user-defined {
         color: $color-highlight;
