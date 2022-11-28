@@ -25,6 +25,8 @@ export default class SpareIcons extends Vue {
 
 <style lang="scss" scoped>
 .spareIcons {
+  flex-grow: 1;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   span {

@@ -2,8 +2,8 @@
   <div class="editTag">
     <Back />
     <Title-manage />
-    <current-tag />
-    <spare-icons />
+    <Current-tag />
+    <Spare-icons />
   </div>
 </template>
 
@@ -31,5 +31,8 @@ export default class EditTag extends Vue {
 <style lang="scss" scoped>
 .editTag {
   background: #fff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>
