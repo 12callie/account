@@ -2,6 +2,7 @@
   <div class="editTag">
     <Back />
     <Title-manage />
+    <current-tag />
     <!-- <spare-icons /> -->
   </div>
 </template>
@@ -11,9 +12,10 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Back from "@/components/money/Back.vue";
 import TitleManage from "@/components/tagManage/TitleMange.vue";
+import CurrentTag from "@/components/tagManage/CurrentTag.vue";
 import SpareIcons from "@/components/tagManage/SpareIcons.vue";
 @Component({
-  components: { Back, TitleManage, SpareIcons },
+  components: { Back, TitleManage, CurrentTag, SpareIcons },
 })
 export default class EditTag extends Vue {
   created() {
