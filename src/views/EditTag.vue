@@ -2,7 +2,7 @@
   <div class="editTag">
     <Back />
     <Title-manage />
-    <spare-icons />
+    <!-- <spare-icons /> -->
   </div>
 </template>
 
