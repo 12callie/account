@@ -26,7 +26,7 @@ export default class CurrentTag extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 8px;
+  padding: 16px;
 
   .input-wrapper {
     border-bottom: 2px solid $color-highlight;
@@ -36,10 +36,10 @@ export default class CurrentTag extends Vue {
       text-align: center;
       width: 7rem;
       font-size: 16px;
-      height: 32px;
-      line-height: 32px;
+      height: 24px;
+      line-height: 24px;
       caret-color: $color-highlight;
-      padding: 4px 0px;
+      padding: 2px 0px;
       margin-top: 16px;
     }
   }

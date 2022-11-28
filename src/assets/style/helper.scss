@@ -5,16 +5,7 @@ $font-fs: Baskerville, "Times New Roman", "Liberation Serif", STFangsong, FangSo
 $color-highlight: rgb(48, 62, 159);
 
 
-%iconStyle {
-    width: 48px;
-    height: 48px;
-    padding: 4px;
-    border-radius: 50%;
-    background: rgb(221, 221, 221);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 %iconSize {
     ::v-deep .icon {

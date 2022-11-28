@@ -2,10 +2,8 @@
   <div class="spareIcons">
     <span>选择图标</span>
     <ol>
-      <li v-for="index in spareIcons" :key="index">
-        <div class="icon">
-          <Icon :name="index" />
-        </div>
+      <li v-for="(item, index) in spareIcons" :key="index">
+        <Circular-icon :iconName="item" class="icon" />
       </li>
     </ol>
   </div>
@@ -15,22 +13,24 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import spareIcons from "@/constants/spareIcons";
-@Component
+import CircularIcon from "@/components/CircularIcon.vue";
+
+@Component({
+  components: { CircularIcon },
+})
 export default class SpareIcons extends Vue {
   spareIcons = spareIcons;
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/style/helper.scss";
 .spareIcons {
-  @extend %iconSize;
   display: flex;
   flex-direction: column;
-  height: 100%;
   span {
     background: #eee;
     padding: 4px 16px;
+    font-size: 14px;
   }
   ol {
     flex-grow: 1;
@@ -47,9 +47,6 @@ export default class SpareIcons extends Vue {
       justify-content: center;
       align-items: center;
       margin-top: 16px;
-      .icon {
-        @extend %iconStyle;
-      }
     }
   }
 }

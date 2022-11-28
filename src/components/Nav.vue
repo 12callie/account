@@ -40,10 +40,7 @@ export default class Nav extends Vue {}
     &.selected {
       color: $color-highlight;
     }
-    ::v-deep .icon {
-      width: 30px;
-      height: 30px;
-    }
+    @extend %iconSize;
   }
 }
 </style>

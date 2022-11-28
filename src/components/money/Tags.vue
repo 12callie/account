@@ -10,9 +10,6 @@
       <span>{{ tag.name }}</span>
     </li>
     <li @click="manageTags">
-      <!-- <div class="tags-icons user-defined">
-        <Icon name="自定义" />
-      </div> -->
       <Circular-icon iconName="自定义" class="tags-icons user-defined" />
       <span>自定义</span>
     </li>

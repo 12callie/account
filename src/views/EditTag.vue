@@ -3,7 +3,7 @@
     <Back />
     <Title-manage />
     <current-tag />
-    <!-- <spare-icons /> -->
+    <spare-icons />
   </div>
 </template>
 
@@ -29,11 +29,7 @@ export default class EditTag extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/style/helper.scss";
-
 .editTag {
-  @extend %iconSize;
-
   background: #fff;
 }
 </style>

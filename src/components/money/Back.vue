@@ -23,5 +23,6 @@ export default class Back extends Vue {
   left: 0;
   margin: 16px;
   color: $color-highlight;
+  @extend %iconSize;
 }
 </style>

@@ -7,9 +7,7 @@
         <div class="removeTag" @click="remove(t)">
           <Icon name="remove" />
         </div>
-        <div class="icons">
-          <Icon :name="t.name" />
-        </div>
+        <Circular-icon :iconName="t.name" class="icons" />
         <span>{{ t.name }}</span>
         <router-link :to="`/editTag/${t.id}`" class="editButton"
           >编辑</router-link
@@ -30,9 +28,10 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Back from "@/components/money/Back.vue";
 import Tabs from "@/components/money/Tabs.vue";
+import CircularIcon from "@/components/CircularIcon.vue";
 
 @Component({
-  components: { Back, Tabs },
+  components: { Back, Tabs, CircularIcon },
 })
 export default class ManageTags extends Vue {
   type = this.$route.query.type;
@@ -88,7 +87,6 @@ export default class ManageTags extends Vue {
         margin-right: 16px;
       }
       .icons {
-        @extend %iconStyle;
         margin-right: 16px;
       }
       span {
