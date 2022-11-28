@@ -2,7 +2,7 @@
   <div class="editTag">
     <Back />
     <Title-manage />
-    <Current-tag />
+    <Current-tag :iconName="tag.name" :tagName="tag.name" />
     <Spare-icons />
   </div>
 </template>
@@ -18,12 +18,15 @@ import SpareIcons from "@/components/tagManage/SpareIcons.vue";
   components: { Back, TitleManage, CurrentTag, SpareIcons },
 })
 export default class EditTag extends Vue {
+  get tag() {
+    return this.$store.state.currentTag;
+  }
   created() {
     this.$store.commit("fetchTags");
-    const id = this.$route.params.id;
-    const tagList = this.$store.state.tagList;
-    const tag = tagList.filter((t: Tag) => t.id === Number(id))[0];
-    console.log(tag);
+    this.$store.commit("setCurrentTag", Number(this.$route.params.id));
+    if (!this.tag) {
+      this.$router.replace("/404");
+    }
   }
 }
 </script>

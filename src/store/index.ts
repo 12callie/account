@@ -7,13 +7,15 @@ Vue.use(Vuex);
 
 type RootState = {
   tagList: Tag[],
-  recordList: RecordItem[];
+  recordList: RecordItem[],
+  currentTag: undefined | Tag,
 };
 
 const store = new Vuex.Store({
   state: {
     tagList: [],
     recordList: [],
+    currentTag: undefined,
   } as RootState,
   mutations: {
     fetchRecords(state) {
@@ -55,7 +57,10 @@ const store = new Vuex.Store({
           window.alert("删除失败");
         }
       }
-    }
+    },
+    setCurrentTag(state, id: number) {
+      state.currentTag = state.tagList.filter((tag) => tag.id === id)[0];
+    },
   },
 
 });

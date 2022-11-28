@@ -2,7 +2,12 @@
   <div class="currentTag">
     <Circular-icon :iconName="iconName" />
     <div class="input-wrapper">
-      <input type="text" placeholder="输入类别名称" maxlength="6" />
+      <input
+        type="text"
+        placeholder="输入类别名称"
+        maxlength="6"
+        :value="tagName"
+      />
     </div>
   </div>
 </template>
@@ -16,6 +21,7 @@ import CircularIcon from "@/components/CircularIcon.vue";
 })
 export default class CurrentTag extends Vue {
   @Prop(String) iconName?: string;
+  @Prop(String) tagName?: string;
 }
 </script>
 

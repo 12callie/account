@@ -9,9 +9,9 @@
         </div>
         <Circular-icon :iconName="t.name" class="icons" />
         <span>{{ t.name }}</span>
-        <router-link :to="`/editTag/${t.id}`" class="editButton"
-          >编辑</router-link
-        >
+        <router-link :to="`/editTag/${t.id}`" class="editButton">
+          <span>编辑</span>
+        </router-link>
       </li>
     </ol>
     <div class="createTag">
