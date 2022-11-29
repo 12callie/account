@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '../router';
-import { defaultTags } from "@/constants/defaultTagList";
-import clone from "@/lib/clone";
+import { defaultTags } from '@/constants/defaultTagList';
+import clone from '@/lib/clone';
 
 Vue.use(Vuex);
 
 type RootState = {
-  tagList: Tag[],
-  recordList: RecordItem[],
-  currentTag: undefined | Tag,
+  tagList: Tag[];
+  recordList: RecordItem[];
+  currentTag: undefined | Tag;
 };
 
 const store = new Vuex.Store({
@@ -43,7 +43,7 @@ const store = new Vuex.Store({
     },
     removeTag(state, tag: Tag) {
       const id = tag.id;
-      if (window.confirm("确定删除此标签吗？")) {
+      if (window.confirm('确定删除此标签吗？')) {
         let index = -1;
         for (let i = 0; i < state.tagList.length; i++) {
           if (state.tagList[i].id === id) {
@@ -55,7 +55,7 @@ const store = new Vuex.Store({
           state.tagList.splice(index, 1);
           store.commit('saveTags');
         } else {
-          window.alert("删除失败");
+          window.alert('删除失败');
         }
       }
     },
@@ -65,7 +65,7 @@ const store = new Vuex.Store({
     updateTag(state, newTag: Tag) {
       const { id, name, svg } = newTag;
       console.log('newTag', id, name, svg);
-      const isHasId = state.tagList.find(t => {
+      const isHasId = state.tagList.find((t) => {
         const { id: tagId } = t;
         return tagId === id;
       });
@@ -74,23 +74,23 @@ const store = new Vuex.Store({
       if (!isHasId) {
         return;
       }
-      const isHasName = state.tagList.find(t => {
-        const { name: tagName } = t;
-        return name === tagName;
+
+      // 名称一样并且id不一样返回true
+      const noSave = state.tagList.find((t) => {
+        const { name: tagName, id: tagId } = t;
+        return name === tagName && id !== tagId;
       });
 
-      if (isHasName) {
+      if (noSave) {
         window.alert('标签名已存在');
       } else {
-        const tag = state.tagList.filter(item => item.id === id)[0];
+        const tag = state.tagList.filter((item) => item.id === id)[0];
         tag.name = name;
         tag.svg = svg;
         store.commit('saveTags');
         router.back();
       }
-
-    }
+    },
   },
-
 });
-export default store;   
+export default store;
