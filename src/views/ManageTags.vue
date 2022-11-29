@@ -7,7 +7,7 @@
         <div class="removeTag" @click="remove(t)">
           <Icon name="remove" />
         </div>
-        <Circular-icon :iconName="t.name" class="icons" />
+        <Circular-icon :iconName="t.svg" class="icons" />
         <span>{{ t.name }}</span>
         <router-link :to="`/editTag/${t.id}`" class="editButton">
           <span>编辑</span>
@@ -29,6 +29,7 @@ import { Component } from "vue-property-decorator";
 import Back from "@/components/money/Back.vue";
 import Tabs from "@/components/money/Tabs.vue";
 import CircularIcon from "@/components/CircularIcon.vue";
+import clone from "@/lib/clone";
 
 @Component({
   components: { Back, Tabs, CircularIcon },
@@ -42,7 +43,8 @@ export default class ManageTags extends Vue {
     return this.$store.state.tagList as Tag[];
   }
   get tags() {
-    return this.tagList.filter((i) => i.type === this.type);
+    const newTagList = clone(this.tagList);
+    return newTagList.filter((i) => i.type === this.type);
   }
   remove(t: Tag) {
     if (this.tags.length === 1) {

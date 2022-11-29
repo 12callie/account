@@ -1,7 +1,7 @@
 <template>
   <div class="titleManage">
     <span>{{ title }}类别</span>
-    <button class="save">保存</button>
+    <button class="save" @click="saveChanges">保存</button>
   </div>
 </template>
 
@@ -15,17 +15,21 @@ export default class TitleManage extends Vue {
 
   get title() {
     const hash: { [key: string]: boolean } = {
-      编辑支出: this.type === "-",
-      编辑收入: this.type === "+",
-      新增支出: this.typeNew === "-",
-      新增收入: this.typeNew === "+",
+      '编辑支出': this.type === "-",
+      '编辑收入': this.type === "+",
+      '新增支出': this.typeNew === "-",
+      '新增收入': this.typeNew === "+",
     };
     for (let i in hash) {
-      if (hash[i] === true) {
+      if (hash[i]) {
         return i;
       }
     }
     return "";
+  }
+
+  saveChanges() {
+    this.$emit("submitChanges");
   }
 }
 </script>

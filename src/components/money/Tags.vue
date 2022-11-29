@@ -6,7 +6,7 @@
       @click="select(tag)"
       :class="{ selected: selectedTag.indexOf(tag) >= 0 }"
     >
-      <Circular-icon :iconName="tag.name" class="tags-icons" />
+      <Circular-icon :iconName="tag.svg" class="tags-icons" />
       <span>{{ tag.name }}</span>
     </li>
     <li @click="manageTags">
@@ -20,21 +20,24 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import CircularIcon from "@/components/CircularIcon.vue";
+import clone from "@/lib/clone";
 
 @Component({
   components: { CircularIcon },
 })
 export default class Tags extends Vue {
-  created() {
+  @Prop(String) type!: string;
+
+  beforeCreate() {
     this.$store.commit("fetchTags");
   }
   get tagList() {
     return this.$store.state.tagList as Tag[];
   }
-  @Prop(String) type!: string;
 
   get tags() {
-    return this.tagList.filter((i) => i.type === this.type);
+    const newTagList = clone(this.tagList);
+    return newTagList.filter((i) => i.type === this.type);
   }
 
   selectedTag: Tag[] = [];

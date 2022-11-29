@@ -3,7 +3,11 @@
     <span>选择图标</span>
     <ol>
       <li v-for="(item, index) in spareIcons" :key="index">
-        <Circular-icon :iconName="item" class="icon" />
+        <Circular-icon
+          :iconName="item"
+          class="icon"
+          @click.native="changeIcon(item)"
+        />
       </li>
     </ol>
   </div>
@@ -20,6 +24,9 @@ import CircularIcon from "@/components/CircularIcon.vue";
 })
 export default class SpareIcons extends Vue {
   spareIcons = spareIcons;
+  changeIcon(item: string) {
+    this.$emit("update:svg", item);
+  }
 }
 </script>
 

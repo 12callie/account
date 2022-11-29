@@ -7,6 +7,7 @@
         placeholder="输入类别名称"
         maxlength="6"
         :value="tagName"
+        @input="$emit('update:name', $event.target.value)"
       />
     </div>
   </div>
@@ -45,7 +46,7 @@ export default class CurrentTag extends Vue {
       height: 24px;
       line-height: 24px;
       caret-color: $color-highlight;
-      padding: 2px 0px;
+      padding: 2px 0;
       margin-top: 16px;
     }
   }

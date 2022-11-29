@@ -20,7 +20,6 @@ module.exports = {
       .loader('svgo-loader')
       .options({
         plugins: [
-          //!!!!!!!!!!!!!!!重点就是改这个位置，加个插件名字
           {
             name: 'removeAttrs',
             params: {

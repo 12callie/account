@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import router from '../router';
 import { defaultTags } from "@/constants/defaultTagList";
 import clone from "@/lib/clone";
 
@@ -61,6 +62,34 @@ const store = new Vuex.Store({
     setCurrentTag(state, id: number) {
       state.currentTag = state.tagList.filter((tag) => tag.id === id)[0];
     },
+    updateTag(state, newTag: Tag) {
+      const { id, name, svg } = newTag;
+      console.log('newTag', id, name, svg);
+      const isHasId = state.tagList.find(t => {
+        const { id: tagId } = t;
+        return tagId === id;
+      });
+      // const a = state.tagList.find(({ id: tagId }) => tagId === id);
+      console.log('isHasId', isHasId);
+      if (!isHasId) {
+        return;
+      }
+      const isHasName = state.tagList.find(t => {
+        const { name: tagName } = t;
+        return name === tagName;
+      });
+
+      if (isHasName) {
+        window.alert('标签名已存在');
+      } else {
+        const tag = state.tagList.filter(item => item.id === id)[0];
+        tag.name = name;
+        tag.svg = svg;
+        store.commit('saveTags');
+        router.back();
+      }
+
+    }
   },
 
 });
