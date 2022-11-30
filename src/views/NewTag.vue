@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="newTag">
     <Back />
     <Title-manage @submitChanges="createNewTag" />
     <Current-tag :iconName="tag.svg" :tagName="tag.name" @update:name="writeName" />
@@ -41,4 +41,9 @@ export default class newTag extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .newTag{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
 </style>
