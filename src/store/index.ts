@@ -64,17 +64,15 @@ const store = new Vuex.Store({
     },
     updateTag(state, newTag: Tag) {
       const { id, name, svg } = newTag;
-      console.log('newTag', id, name, svg);
+
+      // 相当于 const a = state.tagList.find(({ id: tagId }) => tagId === id);
       const isHasId = state.tagList.find((t) => {
         const { id: tagId } = t;
         return tagId === id;
       });
-      // const a = state.tagList.find(({ id: tagId }) => tagId === id);
-      console.log('isHasId', isHasId);
       if (!isHasId) {
         return;
       }
-
       // 名称一样并且id不一样返回true
       const noSave = state.tagList.find((t) => {
         const { name: tagName, id: tagId } = t;
@@ -82,7 +80,7 @@ const store = new Vuex.Store({
       });
 
       if (noSave) {
-        window.alert('标签名已存在');
+        window.alert('类别名称已存在');
       } else {
         const tag = state.tagList.filter((item) => item.id === id)[0];
         tag.name = name;
@@ -91,6 +89,20 @@ const store = new Vuex.Store({
         router.back();
       }
     },
+    createTag(state, newTag: Tag){
+      const { name } = newTag;
+      const isHasName = state.tagList.find((t: Tag)=>{
+        const {name: tagName} = t;
+        return name === tagName;
+      })
+      if(isHasName){
+        window.alert('类别名称已存在');
+      }else{
+        state.tagList.push(newTag);
+        store.commit('saveTags');
+        router.back();
+      }
+    }
   },
 });
 export default store;

@@ -34,7 +34,6 @@ export default class EditTag extends Vue {
       this.$router.replace("/404");
     }
   }
-
   update() {
     if (this.tag) {
       this.$store.commit("updateTag", this.tag);

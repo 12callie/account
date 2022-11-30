@@ -27,9 +27,8 @@ export default class TitleManage extends Vue {
     }
     return "";
   }
-
   saveChanges() {
-    this.$emit("submitChanges");
+    this.$emit("submitChanges", this.typeNew);
   }
 }
 </script>
