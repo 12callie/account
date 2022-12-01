@@ -1,27 +1,28 @@
 <template>
   <div class="money-content">
-    <Back />
-    <Tabs :type.sync="record.type" />
-    <Tags :type="record.type" @update:tag="record.tags = $event" />
-    <Notes :showPad="showPad" @update:notes="record.notes = $event" />
+    <Back/>
+    <Tabs :type.sync="record.type"/>
+    <Tags :type="record.type" @update:tag="record.tags = $event"/>
+    <Notes :showPad="showPad" @update:notes="record.notes = $event"/>
     <Number-pad
-      :showPad="showPad"
-      @update:values="onUpdateValues"
-      @submit="saveRecord"
+        :showPad="showPad"
+        @submit="saveRecord"
+        @update:values="onUpdateValues"
     />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import {Component} from "vue-property-decorator";
 import Back from "@/components/money/Back.vue";
 import Tags from "@/components/money/Tags.vue";
 import Tabs from "@/components/money/Tabs.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
 import Notes from "@/components/money/Notes.vue";
+
 @Component({
-  components: { Back, Tags, Tabs, NumberPad, Notes },
+  components: {Back, Tags, Tabs, NumberPad, Notes},
 })
 export default class Money extends Vue {
   record: RecordItem = {
@@ -31,14 +32,21 @@ export default class Money extends Vue {
     amount: "0",
     date: "",
   };
+
   get recordList() {
     return this.$store.state.recordList;
   }
+
+  get showPad() {
+    return this.record.tags.length > 0;
+  }
+
   onUpdateValues(values: { date: string; output: string }) {
-    const { date, output } = values;
+    const {date, output} = values;
     this.record.date = date;
     this.record.amount = parseFloat(output).toFixed(2);
   }
+
   saveRecord() {
     if (this.record.tags.length === 0) {
       return window.alert("请选择标签");
@@ -48,13 +56,7 @@ export default class Money extends Vue {
     this.$store.commit("createRecords", this.record);
     this.$router.push("/bills");
   }
-  get showPad() {
-    if (this.record.tags.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
   created() {
     this.$store.commit("fetchRecords");
   }

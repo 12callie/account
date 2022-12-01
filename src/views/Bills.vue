@@ -5,9 +5,9 @@
         <div></div>
         <div class="time">
           <span>2022年11月</span>
-          <Icon name="caret-bottom" />
+          <Icon name="caret-bottom"/>
         </div>
-        <Icon name="exchange" />
+        <Icon name="exchange"/>
       </div>
       <div class="resultWrapper">
         <div class="expense">
@@ -30,19 +30,19 @@
       </div>
     </div>
     <ol class="content">
-      <li>
+      <li v-for="group in result" :key="group.title">
         <div class="title">
-          <span>11月18日，周五</span>
-          <span>支出：100.00，收入：5.00</span>
+          <span>{{ beautify(group.title) }}</span>
+          <span>{{ summary(group) }}</span>
         </div>
         <ol>
-          <li>
+          <li v-for="item in group.items" :key="item.tags.id">
+            <CircularIcon :iconName="tagSvg(item.tags)"/>
             <div class="information">
-              <CircularIcon class="icon" />
-              <span class="name">餐饮餐饮餐饮</span>
-              <span class="notes">米线米线米线米线米线米线米线米线米线米线米线米线米线米线米线米线米线米线</span>
+              <span class="name">{{ tagName(item.tags) }}</span>
+              <span class="notes">{{ item.notes }}</span>
             </div>
-            <span>-21.00</span>
+            <span :class="{ exp: item.type === '-', inc: item.type === '+' }">{{ item.type }}{{ item.amount }}</span>
           </li>
         </ol>
       </li>
@@ -52,17 +52,88 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import {Component} from 'vue-property-decorator';
 import CircularIcon from '@/components/CircularIcon.vue';
+import clone from '@/lib/clone';
+import dayjs from 'dayjs';
 
+type List = { title: string; expenseTotal?: number; incomeTotal?: number; items: RecordItem[] };
 @Component({
-  components: { CircularIcon },
+  components: {CircularIcon},
 })
-export default class Bills extends Vue {}
+export default class Bills extends Vue {
+  get recordList() {
+    return this.$store.state.recordList as RecordItem[];
+  }
+
+  get result() {
+    const {recordList} = this;
+    const newList = clone(recordList).sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
+    if (newList.length === 0) {
+      return [];
+    }
+    const list: List[] = [
+      {
+        title: newList[0].date,
+        items: [newList[0]],
+      },
+    ];
+    for (let i = 1; i < newList.length; i++) {
+      const last = list[list.length - 1];
+      const now = newList[i];
+      if (dayjs(now.date).isSame(dayjs(last.title), 'day')) {
+        last.items.push(now);
+      } else {
+        list.push({title: now.date, items: [now]});
+      }
+    }
+    console.log(list);
+    list.forEach((group) => {
+      group.expenseTotal = clone(group.items)
+          .filter((t) => t.tags[0].type === '-')
+          .reduce((sum, i) => sum + Number(i.amount), 0);
+      group.incomeTotal = clone(group.items)
+          .filter((t) => t.tags[0].type === '+')
+          .reduce((sum, i) => sum + Number(i.amount), 0);
+    });
+    return list;
+  }
+
+  tagName(tags: Tag[]) {
+    return tags.length === 0 ? '空' : tags[0].name;
+  }
+
+  tagSvg(tags: Tag[]) {
+    return tags.length === 0 ? '' : tags[0].svg;
+  }
+
+  summary(group: List) {
+    if (group.expenseTotal && group.incomeTotal) {
+      return `支出：${group.expenseTotal.toFixed(2)}，收入： ${group.incomeTotal.toFixed(2)}`;
+    } else if (group.expenseTotal) {
+      return `支出：${group.expenseTotal.toFixed(2)}`;
+    } else if (group.incomeTotal) {
+      return `收入： ${group.incomeTotal.toFixed(2)}`;
+    }
+  }
+
+  beautify(time: string) {
+    if (dayjs(time).isSame(dayjs(), 'year')) {
+      return dayjs(time).format('M月D日');
+    } else {
+      return dayjs(time).format('YYYY年M月D日');
+    }
+  }
+
+  beforeCreate() {
+    this.$store.commit('fetchRecords');
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 @import '~@/assets/style/helper.scss';
+
 .bills {
   position: relative;
 
@@ -71,6 +142,7 @@ export default class Bills extends Vue {}
       width: 20px;
       height: 20px;
     }
+
     position: absolute;
     width: 100%;
     height: 184px;
@@ -104,6 +176,7 @@ export default class Bills extends Vue {}
         padding-top: 16px;
         display: flex;
         flex-direction: column;
+
         .moneyWrapper {
           display: flex;
           justify-content: flex-start;
@@ -141,6 +214,8 @@ export default class Bills extends Vue {}
 
   .content {
     padding-top: 184px;
+    width: 100vw;
+
     li {
       .title {
         font-size: 14px;
@@ -150,6 +225,7 @@ export default class Bills extends Vue {}
         justify-content: space-between;
         align-items: center;
       }
+
       ol {
         li {
           background-color: #fff;
@@ -159,30 +235,33 @@ export default class Bills extends Vue {}
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
-          width: 100vw;
+          width: 100%;
 
           .information {
-            width: 85%;
-            flex-grow: 1;
+            width: 65%;
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            .icon {
-              margin-right: 8px;
-              min-width: 48px;
-            }
-            .name {
-              margin-right: 8px;
-              max-width: 64px;
-            }
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            margin-left: 16px;
+            margin-right: auto;
+
             .notes {
-              padding-right: 8px;
               color: #999;
-              max-width: 55%;
-              overflow:hidden;
-              text-overflow:ellipsis;
-              white-space:nowrap;
+              width: 100%;
+              font-size: 14px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
+          }
+
+          .exp {
+            color: rgb(197, 3, 12);
+          }
+
+          .inc {
+            color: rgb(11, 127, 30);
           }
         }
       }

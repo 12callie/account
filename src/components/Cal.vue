@@ -37,9 +37,7 @@ export default class Cal extends Vue {
   }
   onConfirm(date: Date) {
     this.showCal = false;
-
     this.date = this.formatDate(date);
-
     this.$emit("update:date", this.date);
   }
   onClose() {
