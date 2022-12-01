@@ -3,8 +3,8 @@
     <div class="operation">
       <div class="selectTime">
         <div></div>
-        <div class="time">
-          <span>2022年11月</span>
+        <div class="time" @click="pickDate">
+          <span>{{ date }}</span>
           <Icon name="caret-bottom"/>
         </div>
         <Icon name="exchange"/>
@@ -47,21 +47,26 @@
         </ol>
       </li>
     </ol>
+    <PickDate ref="dateTime" @update:date="onUpdateDate"/>
   </layout>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Ref} from 'vue-property-decorator';
 import CircularIcon from '@/components/CircularIcon.vue';
 import clone from '@/lib/clone';
 import dayjs from 'dayjs';
+import PickDate from '@/components/PickDate.vue';
 
 type List = { title: string; expenseTotal?: number; incomeTotal?: number; items: RecordItem[] };
 @Component({
-  components: {CircularIcon},
+  components: {PickDate, CircularIcon},
 })
 export default class Bills extends Vue {
+  @Ref('dateTime') dateTime!: PickDate;
+  date: string = dayjs().format('YYYY年M月');
+
   get recordList() {
     return this.$store.state.recordList as RecordItem[];
   }
@@ -87,7 +92,6 @@ export default class Bills extends Vue {
         list.push({title: now.date, items: [now]});
       }
     }
-    console.log(list);
     list.forEach((group) => {
       group.expenseTotal = clone(group.items)
           .filter((t) => t.tags[0].type === '-')
@@ -97,6 +101,14 @@ export default class Bills extends Vue {
           .reduce((sum, i) => sum + Number(i.amount), 0);
     });
     return list;
+  }
+
+  onUpdateDate(date: Date) {
+    this.date = dayjs(date).format('YYYY年M月');
+  }
+
+  pickDate() {
+    this.dateTime.show = true;
   }
 
   tagName(tags: Tag[]) {
