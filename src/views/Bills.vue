@@ -7,7 +7,7 @@
           <span>{{ date }}</span>
           <Icon name="caret-bottom"/>
         </div>
-        <Icon name="exchange"/>
+        <Icon name="exchange" @click.native="switchMode"/>
       </div>
       <div class="resultWrapper">
         <div class="expense">
@@ -48,6 +48,7 @@
       </li>
     </ol>
     <PickDate ref="dateTime" @update:date="onUpdateDate"/>
+    <SwitchingPeriod ref="switch"></SwitchingPeriod>
   </layout>
 </template>
 
@@ -58,13 +59,15 @@ import CircularIcon from '@/components/CircularIcon.vue';
 import clone from '@/lib/clone';
 import dayjs from 'dayjs';
 import PickDate from '@/components/PickDate.vue';
+import SwitchingPeriod from '@/components/SwitchingPeriod.vue';
 
 type List = { title: string; expenseTotal?: number; incomeTotal?: number; items: RecordItem[] };
 @Component({
-  components: {PickDate, CircularIcon},
+  components: {PickDate, CircularIcon, SwitchingPeriod},
 })
 export default class Bills extends Vue {
   @Ref('dateTime') dateTime!: PickDate;
+  @Ref('switch') switch!: SwitchingPeriod;
   date: string = dayjs().format('YYYY年M月');
 
   get recordList() {
@@ -101,6 +104,10 @@ export default class Bills extends Vue {
           .reduce((sum, i) => sum + Number(i.amount), 0);
     });
     return list;
+  }
+
+  switchMode() {
+    this.switch.show = true;
   }
 
   onUpdateDate(date: Date) {
