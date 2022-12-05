@@ -1,14 +1,13 @@
 <template>
   <layout class="bills">
-    {{ mode }}
     <div class="operation">
       <div class="selectTime">
         <div></div>
         <div class="time" @click="pickDate">
           <span>{{ date }}</span>
-          <Icon v-if="mode === '1' || mode === '2'" name="caret-bottom"/>
+          <Icon v-if="mode === 'month' || mode === 'year'" name="caret-bottom" />
         </div>
-        <Icon name="exchange" @click.native="switchMode"/>
+        <Icon name="exchange" @click.native="switchMode" />
       </div>
       <div class="resultWrapper">
         <div class="expense">
@@ -38,7 +37,7 @@
         </div>
         <ol>
           <li v-for="item in group.items" :key="item.tags.id">
-            <CircularIcon :iconName="tagSvg(item.tags)"/>
+            <CircularIcon :iconName="tagSvg(item.tags)" />
             <div class="information">
               <span class="name">{{ tagName(item.tags) }}</span>
               <span class="notes">{{ item.notes }}</span>
@@ -48,14 +47,14 @@
         </ol>
       </li>
     </ol>
-    <PickDate ref="dateTime" @update:date="onUpdateDate"/>
-    <SwitchingPeriod ref="switch" :radio.sync="mode"></SwitchingPeriod>
+    <PickDate ref="dateTime" :mode="mode" @update:date="onUpdateDate" />
+    <SwitchingPeriod ref="switch" @update:radio="mode = $event"></SwitchingPeriod>
   </layout>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Ref, Watch} from 'vue-property-decorator';
+import { Component, Ref, Watch } from 'vue-property-decorator';
 import CircularIcon from '@/components/CircularIcon.vue';
 import clone from '@/lib/clone';
 import PickDate from '@/components/PickDate.vue';
@@ -66,13 +65,16 @@ const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 
 type List = { title: string; expenseTotal?: number; incomeTotal?: number; items: RecordItem[] };
+
+type TimeType = 'month' | 'year';
+type Type = 'all' | TimeType;
 @Component({
-  components: {PickDate, CircularIcon, SwitchingPeriod},
+  components: { PickDate, CircularIcon, SwitchingPeriod },
 })
 export default class Bills extends Vue {
   @Ref('dateTime') dateTime!: PickDate;
   @Ref('switch') switch!: SwitchingPeriod;
-  mode = '1';
+  mode: Type = 'month';
   date: string = dayjs().format('YYYY年M月');
   duration: string = '本月';
   someExpenseTotal: string = (0).toFixed(2);
@@ -84,11 +86,23 @@ export default class Bills extends Vue {
   }
 
   get result() {
-    const {recordList} = this;
-    const newList = clone(recordList)
-        .filter((i) => dayjs(i.date).isSame(dayjs(this.date, 'YYYY年M月'), 'month'))
+    const { recordList } = this;
+    const hash: Record<TimeType, string> = {
+      month: 'YYYY年M月',
+      year: 'YYYY年',
+    };
+    let newList: RecordItem[];
+    if (this.mode === 'all') {
+      newList = clone(recordList).sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
+    } else {
+      newList = clone(recordList)
+        .filter((i) => dayjs(i.date).isSame(dayjs(this.date, hash[this.mode as TimeType]), this.mode as TimeType))
         .sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
+    }
     if (newList.length === 0) {
+      this.someExpenseTotal = (0).toFixed(2);
+      this.someIncomeTotal = (0).toFixed(2);
+      this.someSurplusTotal = (0).toFixed(2);
       return [];
     }
     const list: List[] = [
@@ -103,23 +117,23 @@ export default class Bills extends Vue {
       if (dayjs(now.date).isSame(dayjs(last.title), 'day')) {
         last.items.push(now);
       } else {
-        list.push({title: now.date, items: [now]});
+        list.push({ title: now.date, items: [now] });
       }
     }
     list.forEach((group) => {
       group.expenseTotal = clone(group.items)
-          .filter((t) => t.tags[0].type === '-')
-          .reduce((sum, i) => sum + Number(i.amount), 0);
+        .filter((t) => t.tags[0].type === '-')
+        .reduce((sum, i) => sum + Number(i.amount), 0);
       group.incomeTotal = clone(group.items)
-          .filter((t) => t.tags[0].type === '+')
-          .reduce((sum, i) => sum + Number(i.amount), 0);
+        .filter((t) => t.tags[0].type === '+')
+        .reduce((sum, i) => sum + Number(i.amount), 0);
     });
     this.someExpenseTotal = clone(list)
-        .reduce((sum, i) => sum + (i.expenseTotal || 0), 0)
-        .toFixed(2);
+      .reduce((sum, i) => sum + (i.expenseTotal || 0), 0)
+      .toFixed(2);
     this.someIncomeTotal = clone(list)
-        .reduce((sum, i) => sum + (i.incomeTotal || 0), 0)
-        .toFixed(2);
+      .reduce((sum, i) => sum + (i.incomeTotal || 0), 0)
+      .toFixed(2);
     this.someSurplusTotal = (Number(this.someIncomeTotal) - Number(this.someExpenseTotal)).toFixed(2);
     return list;
   }
@@ -168,12 +182,12 @@ export default class Bills extends Vue {
 
   @Watch('mode')
   onModeChanged() {
-    if (this.mode === '1') {
+    if (this.mode === 'month') {
       this.duration = '本月';
-    } else if (this.mode === '2') {
+    } else if (this.mode === 'year') {
       this.duration = '年度';
       // this.date = dayjs().format('YYYY年');
-    } else if (this.mode === '3') {
+    } else if (this.mode === 'all') {
       this.duration = '总计';
     }
   }

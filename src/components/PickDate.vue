@@ -1,44 +1,64 @@
 <template>
-  <van-overlay :show="show" @click="show = false">
+  <van-popup v-model="show" :style="{ height: '30%' }" position="top">
     <van-datetime-picker
-        v-model="currentDate"
-        :formatter="formatter"
-        :max-date="maxDate"
-        :min-date="minDate"
-        item-height="32px"
-        type="year-month"
-        visible-item-count="5"
-        @confirm="submitDate"
+      v-if="mode === 'month'"
+      v-model="currentDate"
+      :formatter="formatter"
+      :max-date="maxDate"
+      :min-date="minDate"
+      item-height="32px"
+      type="year-month"
+      visible-item-count="5"
+      @cancel="closeDatePicker"
+      @confirm="submitDate"
     >
       <template v-slot:confirm>
-        <div style="color: rgb(48, 62, 159);font-weight: bold">确定</div>
+        <div style="color: rgb(48, 62, 159); font-weight: bold">确定</div>
       </template>
       <template v-slot:cancel>
-        <div style="color: rgb(48, 62, 159);font-weight: bold">取消</div>
+        <div style="color: rgb(48, 62, 159); font-weight: bold">取消</div>
       </template>
     </van-datetime-picker>
-  </van-overlay>
+    <!--    <van-picker-->
+    <!--      v-else-if="mode === 'year'"-->
+    <!--      :columns="columns"-->
+    <!--      show-toolbar-->
+    <!--      title="标题"-->
+    <!--      @cancel="onCancel"-->
+    <!--      @change="onChange"-->
+    <!--      @confirm="onConfirm"-->
+    <!--    />-->
+  </van-popup>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
-import {DatetimePicker} from 'vant';
-import {Button} from 'vant';
-import {Overlay} from 'vant';
+import { Component, Prop } from 'vue-property-decorator';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+import { DatetimePicker } from 'vant';
+import { Popup } from 'vant';
+import { Picker } from 'vant';
+import { Toast } from 'vant';
 
 @Component({
   components: {
     [DatetimePicker.name]: DatetimePicker,
-    [Overlay.name]: Overlay,
-    [Button.name]: Button,
+    [Popup.name]: Popup,
+    [Picker.name]: Picker,
   },
 })
 export default class PickDate extends Vue {
+  @Prop(String) mode!: string;
   show = false;
   minDate = new Date(2010, 0, 1);
   maxDate = new Date();
   currentDate = new Date();
+  columns = [];
+
+  getYearsToNow() {}
 
   formatter(type: string, val: number) {
     if (type === 'year') {
@@ -51,6 +71,11 @@ export default class PickDate extends Vue {
 
   submitDate(value: Date) {
     this.$emit('update:date', value);
+    this.show = false;
+  }
+
+  closeDatePicker() {
+    this.show = false;
   }
 }
 </script>

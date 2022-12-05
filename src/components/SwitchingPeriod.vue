@@ -13,7 +13,7 @@
           <template #right-icon>
             <van-radio name="1">
               <template #icon="props">
-                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon"/>
+                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon" />
               </template>
             </van-radio>
           </template>
@@ -22,7 +22,7 @@
           <template #right-icon>
             <van-radio name="2">
               <template #icon="props">
-                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon"/>
+                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon" />
               </template>
             </van-radio>
           </template>
@@ -31,7 +31,7 @@
           <template #right-icon>
             <van-radio name="3">
               <template #icon="props">
-                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon"/>
+                <img :src="props.checked ? activeIcon : inactiveIcon" alt="√" class="img-icon" />
               </template>
             </van-radio>
           </template>
@@ -43,8 +43,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component, Prop} from 'vue-property-decorator';
-import {Popup, RadioGroup, Radio, Cell, CellGroup} from 'vant';
+import { Component } from 'vue-property-decorator';
+import { Popup, RadioGroup, Radio, Cell, CellGroup } from 'vant';
 
 @Component({
   components: {
@@ -56,26 +56,26 @@ import {Popup, RadioGroup, Radio, Cell, CellGroup} from 'vant';
   },
 })
 export default class SwitchingPeriod extends Vue {
-  @Prop(String) radio!: string;
+  radio = '1';
   show = false;
   activeIcon = require('@/assets/icons/tick.png');
   inactiveIcon = require('@/assets/icons/untick.png');
 
   selectMonth() {
     this.radio = '1';
-    this.$emit('update:radio', this.radio);
+    this.$emit('update:radio', 'month');
     this.show = false;
   }
 
   selectYear() {
     this.radio = '2';
-    this.$emit('update:radio', this.radio);
+    this.$emit('update:radio', 'year');
     this.show = false;
   }
 
   selectAll() {
     this.radio = '3';
-    this.$emit('update:radio', this.radio);
+    this.$emit('update:radio', 'all');
     this.show = false;
   }
 }
