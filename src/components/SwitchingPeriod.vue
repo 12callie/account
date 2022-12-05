@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="show" :style="{ height: '176px', width: '80%' }">
+  <van-popup v-model="show" :style="{ height: '176px', width: '80%' }" close-on-popstate>
     <van-radio-group v-model="radio">
       <van-cell-group>
         <van-cell>
@@ -9,7 +9,7 @@
             </div>
           </template>
         </van-cell>
-        <van-cell clickable title="按月" @click="radio = '1'">
+        <van-cell clickable title="按月" @click="selectMonth">
           <template #right-icon>
             <van-radio name="1">
               <template #icon="props">
@@ -18,7 +18,7 @@
             </van-radio>
           </template>
         </van-cell>
-        <van-cell clickable title="按年" @click="radio = '2'">
+        <van-cell clickable title="按年" @click="selectYear">
           <template #right-icon>
             <van-radio name="2">
               <template #icon="props">
@@ -27,7 +27,7 @@
             </van-radio>
           </template>
         </van-cell>
-        <van-cell clickable title="全部" @click="radio = '3'">
+        <van-cell clickable title="全部" @click="selectAll">
           <template #right-icon>
             <van-radio name="3">
               <template #icon="props">
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 import {Popup, RadioGroup, Radio, Cell, CellGroup} from 'vant';
 
 @Component({
@@ -56,15 +56,33 @@ import {Popup, RadioGroup, Radio, Cell, CellGroup} from 'vant';
   },
 })
 export default class SwitchingPeriod extends Vue {
+  @Prop(String) radio!: string;
   show = false;
-  radio = '1';
   activeIcon = require('@/assets/icons/tick.png');
   inactiveIcon = require('@/assets/icons/untick.png');
+
+  selectMonth() {
+    this.radio = '1';
+    this.$emit('update:radio', this.radio);
+    this.show = false;
+  }
+
+  selectYear() {
+    this.radio = '2';
+    this.$emit('update:radio', this.radio);
+    this.show = false;
+  }
+
+  selectAll() {
+    this.radio = '3';
+    this.$emit('update:radio', this.radio);
+    this.show = false;
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/style/helper.scss";
+@import '~@/assets/style/helper.scss';
 
 .van-cell {
   height: 25%;
