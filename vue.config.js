@@ -14,19 +14,9 @@ module.exports = {
       .loader('svg-sprite-loader')
       .options({ extract: false })
       .end()
-      .before('svg-sprite-loader')
       .use('svgo-loader')
       .loader('svgo-loader')
-      .options({
-        plugins: [
-          {
-            name: 'removeAttrs',
-            params: {
-              attrs: '(fill|stroke)',
-            },
-          },
-        ],
-      })
+      .tap((options) => ({ ...options, plugins: [{ removeAttrs: { attrs: 'fill' } }] }))
       .end();
     config.plugin('svg-sprite').use(require('svg-sprite-loader/plugin'), [{ plainSprite: true }]);
     config.module.rule('svg').exclude.add(dir);
