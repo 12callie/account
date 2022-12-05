@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <ol class="content">
+    <ol v-if="result.length > 0" class="content">
       <li v-for="group in result" :key="group.title">
         <div class="title">
           <span>{{ beautify(group.title) }}</span>
@@ -47,6 +47,12 @@
         </ol>
       </li>
     </ol>
+    <div v-else class="content">
+      <div class="noContent">
+        <Icon name="noContent" />
+        <span>暂无数据</span>
+      </div>
+    </div>
     <PickDate ref="dateTime" :mode="mode" @update:date="onUpdateDate" />
     <SwitchingPeriod ref="switch" @update:radio="mode = $event"></SwitchingPeriod>
   </layout>
@@ -60,8 +66,8 @@ import clone from '@/lib/clone';
 import PickDate from '@/components/PickDate.vue';
 import SwitchingPeriod from '@/components/SwitchingPeriod.vue';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 
 type List = { title: string; expenseTotal?: number; incomeTotal?: number; items: RecordItem[] };
@@ -135,6 +141,7 @@ export default class Bills extends Vue {
       .reduce((sum, i) => sum + (i.incomeTotal || 0), 0)
       .toFixed(2);
     this.someSurplusTotal = (Number(this.someIncomeTotal) - Number(this.someExpenseTotal)).toFixed(2);
+
     return list;
   }
 
@@ -143,11 +150,17 @@ export default class Bills extends Vue {
   }
 
   onUpdateDate(date: Date) {
-    this.date = dayjs(date).format('YYYY年M月');
+    if (this.mode === 'month') {
+      this.date = dayjs(date).format('YYYY年M月');
+    } else if (this.mode === 'year') {
+      this.date = dayjs(date).format('YYYY年');
+    }
   }
 
   pickDate() {
-    this.dateTime.show = true;
+    if (this.mode === 'month' || this.mode === 'year') {
+      this.dateTime.show = true;
+    }
   }
 
   tagName(tags: Tag[]) {
@@ -183,11 +196,13 @@ export default class Bills extends Vue {
   @Watch('mode')
   onModeChanged() {
     if (this.mode === 'month') {
+      this.date = dayjs().format('YYYY年M月');
       this.duration = '本月';
     } else if (this.mode === 'year') {
+      this.date = dayjs().format('YYYY年');
       this.duration = '年度';
-      // this.date = dayjs().format('YYYY年');
     } else if (this.mode === 'all') {
+      this.date = '全部账单';
       this.duration = '总计';
     }
   }
@@ -327,6 +342,20 @@ export default class Bills extends Vue {
             color: rgb(11, 127, 30);
           }
         }
+      }
+    }
+
+    .noContent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+      margin-top: 60px;
+
+      ::v-deep .icon {
+        height: 50px;
+        width: 50px;
       }
     }
   }
