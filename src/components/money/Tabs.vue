@@ -1,61 +1,41 @@
 <template>
-  <div>
-    <ol class="tabs">
-      <li
-        class="tabs-item"
-        :class="type === '-' && 'selected'"
-        @click="selectType('-')"
-      >
-        支出
-      </li>
-      <li
-        class="tabs-item"
-        :class="type === '+' && 'selected'"
-        @click="selectType('+')"
-      >
-        收入
-      </li>
-    </ol>
-  </div>
+  <basics-tabs
+    :data-source="recordTypeList"
+    :type="type"
+    class="types"
+    class-prefix="types"
+    @update:value="selectTab"
+  />
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-@Component
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import BasicsTabs from '@/components/BasicsTabs.vue';
+import recordTypeList from '@/constants/recordTypeList';
+
+@Component({
+  components: { BasicsTabs },
+})
 export default class Tabs extends Vue {
   @Prop(String) type!: string;
-  selectType(type: string) {
-    if (this.type !== "-" && this.type !== "+") {
-      throw new Error("type is unknown");
-    }
-    this.$emit("update:type", type);
+  recordTypeList = recordTypeList;
+
+  selectTab(val: string) {
+    this.$emit('update:type', val);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/style/helper.scss";
-.tabs {
+.types {
   display: flex;
   justify-content: center;
   align-items: center;
-  &-item {
+
+  ::v-deep .types-tabs-item {
     padding: 24px 28px 4px 28px;
     height: 56px;
-    position: relative;
-    &.selected {
-      color: $color-highlight;
-    }
-    &.selected::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: $color-highlight;
-    }
   }
 }
 </style>

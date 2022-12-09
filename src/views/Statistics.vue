@@ -4,7 +4,12 @@
       <Tabs :type.sync="type" />
       <TabBar :interval.sync="interval" />
     </div>
-    <MyChart :option="option" />
+    <div class="statistics">
+      <div class="period">
+        <basics-tabs data-source="" />
+      </div>
+      <MyChart :option="option" />
+    </div>
   </layout>
 </template>
 
@@ -15,9 +20,10 @@ import Tabs from '@/components/money/Tabs.vue';
 import MyChart from '@/components/MyChart.vue';
 import { EChartOption } from 'echarts';
 import TabBar from '@/components/TabBar.vue';
+import BasicsTabs from '@/components/BasicsTabs.vue';
 
 @Component({
-  components: { TabBar, MyChart, Tabs },
+  components: { BasicsTabs, TabBar, MyChart, Tabs },
 })
 export default class Statistics extends Vue {
   type: '-' | '+' = '-';
@@ -113,5 +119,8 @@ export default class Statistics extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.statistics {
 }
 </style>
