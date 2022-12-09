@@ -19,6 +19,10 @@ module.exports = {
       .tap((options) => ({ ...options, plugins: [{ removeAttrs: { attrs: 'fill' } }] }))
       .end();
     config.plugin('svg-sprite').use(require('svg-sprite-loader/plugin'), [{ plainSprite: true }]);
+    config.plugin('html').tap((args) => {
+      args[0].title = 'account';
+      return args;
+    });
     config.module.rule('svg').exclude.add(dir);
   },
 };
