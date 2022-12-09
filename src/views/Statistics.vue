@@ -1,6 +1,9 @@
 <template>
   <layout>
-    <Tabs :type.sync="type" />
+    <div class="header">
+      <Tabs :type.sync="type" />
+      <TabBar :interval.sync="interval" />
+    </div>
     <MyChart :option="option" />
   </layout>
 </template>
@@ -11,12 +14,14 @@ import { Component } from 'vue-property-decorator';
 import Tabs from '@/components/money/Tabs.vue';
 import MyChart from '@/components/MyChart.vue';
 import { EChartOption } from 'echarts';
+import TabBar from '@/components/TabBar.vue';
 
 @Component({
-  components: { MyChart, Tabs },
+  components: { TabBar, MyChart, Tabs },
 })
 export default class Statistics extends Vue {
-  type = '-';
+  type: '-' | '+' = '-';
+  interval: 'week' | 'month' | 'year' = 'week';
   option: EChartOption = {
     color: ['#333'],
     grid: {
@@ -102,4 +107,11 @@ export default class Statistics extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>
