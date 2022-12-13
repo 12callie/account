@@ -18,58 +18,16 @@
         <span v-else-if="type === '+'">收入排行</span>
       </div>
       <ol class="rank-content">
-        <li>
-          <CircularIcon :iconName="'健身'" />
+        <li v-for="(item, index) in rankList" :key="index">
+          <CircularIcon :iconName="item.tag[0].svg" />
           <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
+            <span class="name">{{ item.tag[0].name }}</span>
+            <span class="percent">{{ item.percent }}%</span>
           </div>
-          <span>{{ type }}186.00</span>
-        </li>
-
-        <li>
-          <CircularIcon :iconName="'健身'" />
-          <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
-          </div>
-          <span>{{ type }}</span>
-        </li>
-        <li>
-          <CircularIcon :iconName="'健身'" />
-          <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
-          </div>
-          <span>{{ type }}</span>
-        </li>
-        <li>
-          <CircularIcon :iconName="'健身'" />
-          <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
-          </div>
-          <span>{{ type }}</span>
-        </li>
-        <li>
-          <CircularIcon :iconName="'健身'" />
-          <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
-          </div>
-          <span>{{ type }}</span>
-        </li>
-        <li>
-          <CircularIcon :iconName="'健身'" />
-          <div class="information">
-            <span class="name">健身</span>
-            <span class="percent">93%</span>
-          </div>
-          <span>{{ type }}</span>
+          <span>{{ type }}{{ item.itemAmount }}</span>
         </li>
       </ol>
     </div>
-    {{ targetRecords }}
   </layout>
 </template>
 
@@ -211,9 +169,50 @@ export default class Statistics extends Vue {
       .sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf());
   }
 
-  // get total() {
-  //
-  // }
+  get result1() {
+    return [];
+  }
+
+  get rankList() {
+    const grossAmount = this.targetRecords.reduce((sum, i) => sum + Number(i.amount), 0);
+
+    // const res2: { [key: string]: RecordItem[] } = {};
+    // for (let i = 0; i < this.targetRecords.length; i++) {
+    //   const key = this.targetRecords[i].tags[0].name;
+    //   if (key in res2) {
+    //     res2[key].push(this.targetRecords[i]);
+    //   } else {
+    //     res2[key] = [];
+    //     res2[key].push(this.targetRecords[i]);
+    //   }
+    // }
+    // const rankItemAmount: string[] = [];
+    //
+    // for (let j in res2) {
+    //   const x = res2[j]
+    //     .map((item) => item.amount)
+    //     .reduce((sum, i) => sum + Number(i), 0)
+    //     .toFixed(2);
+    //   rankItemAmount.push(x);
+    // }
+    type RankGroup = { tag: Tag[]; itemAmount: string; percent: string }[];
+    const tagNames: string[] = [];
+    const res2: RankGroup = [];
+    for (let i of this.targetRecords) {
+      const index = tagNames.indexOf(i.tags[0].name);
+      if (index < 0) {
+        tagNames.push(i.tags[0].name);
+        res2.push({ tag: i.tags, itemAmount: i.amount, percent: '' });
+      } else {
+        res2[index].itemAmount = (Number(res2[index].itemAmount) + Number(i.amount)).toFixed(2);
+      }
+      for (let i = 0; i < res2.length; i++) {
+        res2[i].percent = ((Number(res2[i].itemAmount) * 100) / grossAmount).toFixed(2);
+      }
+    }
+    res2.sort((a, b) => Number(b.percent) - Number(a.percent));
+    return res2;
+  }
 
   beforeCreate() {
     this.$store.commit('fetchRecords');
@@ -222,15 +221,25 @@ export default class Statistics extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.statistics-wrapper {
+  position: relative;
+}
+
 .header {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fff;
+  height: 110px;
+  position: absolute;
+  width: 100%;
+  z-index: 100;
 }
 
 .statistics {
+  padding-top: 110px;
+
   .period {
     padding: 4px 16px;
     font-size: 14px;
