@@ -10,7 +10,7 @@
         <span v-else-if="interval === 'month'">本月</span>
         <span v-else-if="interval === 'year'">今年</span>
       </div>
-      <MyChart :option="option" />
+      <MyChart :chartTime="chartTime" :seriesData="seriesData" />
     </div>
     <div class="rank">
       <div class="rank-title">
@@ -36,165 +36,102 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import Tabs from '@/components/money/Tabs.vue';
 import MyChart from '@/components/MyChart.vue';
-import { EChartOption } from 'echarts';
 import TabBar from '@/components/TabBar.vue';
 import BasicsTabs from '@/components/BasicsTabs.vue';
 import clone from '@/lib/clone';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import CircularIcon from '@/components/CircularIcon.vue';
+import _ from 'lodash';
 
 dayjs.extend(weekOfYear);
 
 interface NewRecordItem extends RecordItem {
   time: string;
 }
-
+type Interval = 'week' | 'month' | 'year';
 @Component({
   components: { CircularIcon, BasicsTabs, TabBar, MyChart, Tabs },
 })
 export default class Statistics extends Vue {
   type: '-' | '+' = '-';
-  interval: 'week' | 'month' | 'year' = 'week';
-  option: EChartOption = {
-    color: ['#333'],
-    grid: {
-      left: '24px',
-      right: '24px',
-      top: '24px',
-      bottom: '24px',
-    },
-    xAxis: {
-      type: 'category',
-      data: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '24',
-        '25',
-        '26',
-        '27',
-        '28',
-        '29',
-        '30',
-      ],
-      axisLine: {
-        show: true,
-        lineStyle: {
-          width: 0.5,
-          color: 'rgb(142,142,142)',
-        },
-      },
-      axisLabel: {
-        show: true,
-        color: 'rgb(142,142,142)',
-        fontSize: 10,
-        // formatter: function (value, index) {
-        //   return value + 'kg';
-        // },
-      },
-      axisTick: {
-        inside: true,
-        interval: 0,
-      },
-    },
+  interval: Interval = 'week';
 
-    yAxis: {
-      show: false,
-      type: 'value',
-    },
-    series: [
-      {
-        data: [
-          120, 200, 150, 80, 0, 0, 0, 120, 200, 150, 80, 0, 0, 130, 120, 200, 150, 80, 70, 110, 130, 120, 200, 150, 80,
-          70, 110, 130, 1, 2,
-        ],
-        type: 'bar',
-        label: {
-          show: true,
-          position: 'top',
-        },
-        barWidth: '30%',
-      },
-    ],
-  };
-
+  get chartTime() {
+    if(this.interval === 'week'){
+      return this.chartData.map((i) => dayjs(i.date).format('M/D'));
+    }else if(this.interval === 'month'){
+      return this.chartData.map((i) => dayjs(i.date).format('D'));
+    }else if(this.interval === 'year'){
+      return this.chartData.map((i) => dayjs(i.date).format('M'));
+    }
+  }
+  get seriesData() {
+    return this.chartData.map((i) => i.chartAmount);
+  }
   get recordList() {
     return this.$store.state.recordList as RecordItem[];
   }
 
   get targetRecords() {
-    // if (this.interval === 'week') {
-    //   const x = newList.map((i) => ({
-    //     ...i,
-    //     time: [dayjs(i.date).year(), dayjs(i.date).week()].join(','),
-    //   }));
-    //   const result: Record<string, NewRecordItem[]> = {};
-    //   for (let i = 0; i < x.length; i++) {
-    //     const key = x[i].time;
-    //     if (key in result) {
-    //       result[key].push(x[i]);
-    //     } else {
-    //       result[key] = [];
-    //       result[key].push(x[i]);
-    //     }
-    //   }
-    //   const arr = console.log(result, 'result');
-    // } else if (this.interval === 'month') {
-    // } else if (this.interval === 'year') {
-    // }
     return clone(this.recordList)
       .filter((i) => i.type === this.type)
       .filter((i) => dayjs(i.date).isSame(dayjs(), this.interval))
       .sort((a, b) => dayjs(a.date).valueOf() - dayjs(b.date).valueOf());
   }
 
-  get result1() {
-    return [];
+  get chartData() {
+    const x: { date: string; amount: number }[] = [
+      { date: this.targetRecords[0].date, amount: Number(this.targetRecords[0].amount) },
+    ];
+    for (let i = 1; i < this.targetRecords.length; i++) {
+      const last = x[x.length - 1];
+      const now = this.targetRecords[i];
+      const hash: Record<Interval, 'day' | 'month'> = {
+        week: 'day',
+        month: 'day',
+        year: 'month',
+      };
+      if (dayjs(now.date).isSame(dayjs(last.date), hash[this.interval])) {
+        last.amount += Number(now.amount);
+      } else {
+        x.push({ date: now.date, amount: Number(now.amount) });
+      }
+    }
+    if (this.interval === 'year') {
+      x.map((i) => (i.date = dayjs(i.date).format('YYYY/M')));
+    }
+    let res1: { date: string; chartAmount: string }[] = [];
+    const today = dayjs();
+
+    if (this.interval === 'week') {
+      const mondayOfTheWeek = today.subtract(today.day() ? today.day() - 1 : 6, 'day');
+      for (let i = 0; i < 7; i++) {
+        const date = mondayOfTheWeek.add(i, 'day').format('YYYY/M/D');
+        const found = _.find(x, { date: date });
+        res1.push({ date: date, chartAmount: found ? found.amount.toFixed(2) : (0).toFixed(2) });
+      }
+    } else if (this.interval === 'month') {
+      const firstOfTheMonth = today.startOf('month');
+      const daysOfTheMonth = today.daysInMonth();
+      for (let i = 0; i < daysOfTheMonth; i++) {
+        const date = firstOfTheMonth.add(i, 'day').format('YYYY/M/D');
+        const found = _.find(x, { date: date });
+        res1.push({ date: date, chartAmount: found ? found.amount.toFixed(2) : (0).toFixed(2) });
+      }
+    } else if (this.interval === 'year') {
+      const firstMonth = today.month(0);
+      for (let i = 0; i < 12; i++) {
+        const date = firstMonth.add(i, 'month').format('YYYY/M');
+        const found = _.find(x, { date: date });
+        res1.push({ date: date, chartAmount: found ? found.amount.toFixed(2) : (0).toFixed(2) });
+      }
+    }
+    return res1;
   }
 
   get rankList() {
     const grossAmount = this.targetRecords.reduce((sum, i) => sum + Number(i.amount), 0);
-
-    // const res2: { [key: string]: RecordItem[] } = {};
-    // for (let i = 0; i < this.targetRecords.length; i++) {
-    //   const key = this.targetRecords[i].tags[0].name;
-    //   if (key in res2) {
-    //     res2[key].push(this.targetRecords[i]);
-    //   } else {
-    //     res2[key] = [];
-    //     res2[key].push(this.targetRecords[i]);
-    //   }
-    // }
-    // const rankItemAmount: string[] = [];
-    //
-    // for (let j in res2) {
-    //   const x = res2[j]
-    //     .map((item) => item.amount)
-    //     .reduce((sum, i) => sum + Number(i), 0)
-    //     .toFixed(2);
-    //   rankItemAmount.push(x);
-    // }
     type RankGroup = { tag: Tag[]; itemAmount: string; percent: string }[];
     const tagNames: string[] = [];
     const res2: RankGroup = [];
