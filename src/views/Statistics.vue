@@ -10,7 +10,7 @@
         <span v-else-if="interval === 'month'">本月</span>
         <span v-else-if="interval === 'year'">今年</span>
       </div>
-      <MyChart :chartTime="chartTime" :seriesData="seriesData" />
+      <MyChart :option="option" />
     </div>
     <div class="rank">
       <div class="rank-title">
@@ -43,12 +43,10 @@ import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import CircularIcon from '@/components/CircularIcon.vue';
 import _ from 'lodash';
+import { EChartOption } from 'echarts';
 
 dayjs.extend(weekOfYear);
 
-interface NewRecordItem extends RecordItem {
-  time: string;
-}
 type Interval = 'week' | 'month' | 'year';
 @Component({
   components: { CircularIcon, BasicsTabs, TabBar, MyChart, Tabs },
@@ -57,18 +55,73 @@ export default class Statistics extends Vue {
   type: '-' | '+' = '-';
   interval: Interval = 'week';
 
+  get option() {
+    return {
+      color: ['#333'],
+      grid: {
+        left: '24px',
+        right: '24px',
+        top: '24px',
+        bottom: '24px',
+      },
+      tooltip: {
+        show: true,
+        position: 'top',
+        formatter: function (params: EChartOption.Tooltip.Format): string {
+          return params.data;
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: this.chartTime,
+        axisLine: {
+          show: true,
+          lineStyle: {
+            width: 0.5,
+            color: 'rgb(142,142,142)',
+          },
+        },
+        axisLabel: {
+          show: true,
+          color: 'rgb(142,142,142)',
+          fontSize: 10,
+        },
+        axisTick: {
+          inside: true,
+          interval: 0,
+        },
+      },
+      yAxis: {
+        show: false,
+        type: 'value',
+      },
+      series: [
+        {
+          data: this.seriesData,
+          type: 'bar',
+          label: {
+            position: 'top',
+          },
+          barWidth: '30%',
+        },
+      ],
+    } as EChartOption;
+  }
+
   get chartTime() {
-    if(this.interval === 'week'){
+    if (this.interval === 'week') {
       return this.chartData.map((i) => dayjs(i.date).format('M/D'));
-    }else if(this.interval === 'month'){
+    } else if (this.interval === 'month') {
       return this.chartData.map((i) => dayjs(i.date).format('D'));
-    }else if(this.interval === 'year'){
+    } else if (this.interval === 'year') {
       return this.chartData.map((i) => dayjs(i.date).format('M'));
     }
   }
+
   get seriesData() {
     return this.chartData.map((i) => i.chartAmount);
   }
+
   get recordList() {
     return this.$store.state.recordList as RecordItem[];
   }
@@ -81,6 +134,9 @@ export default class Statistics extends Vue {
   }
 
   get chartData() {
+    if (this.targetRecords.length === 0) {
+      return [];
+    }
     const x: { date: string; amount: number }[] = [
       { date: this.targetRecords[0].date, amount: Number(this.targetRecords[0].amount) },
     ];
