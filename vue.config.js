@@ -25,5 +25,5 @@ module.exports = {
     });
     config.module.rule('svg').exclude.add(dir);
   },
-  publicPath: process.env.NODE_ENV === 'production' ? 'account-website' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/account-website/' : '/',
 };
